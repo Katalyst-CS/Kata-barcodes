@@ -1,10 +1,19 @@
 
-FROM rust:1.82.0 AS compiler
+FROM ubuntu:25.04 AS compiler
+RUN apt update; apt upgrade -y
+RUN apt install -y curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    libudev-dev \
+    gcc \
+    g++ \
+    make
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 WORKDIR /usr/src/app
 COPY ./Cargo.toml ./
-RUN cargo build --release
-RUN rm -rf src/ target/release/deps
-COPY ./src .
+COPY src/ ./src
 
 # Compila la aplicación en modo release
 RUN cargo build --release
@@ -12,11 +21,12 @@ RUN cargo build --release
 # -----------------------------------------
 # --- Etapa 2
 
-FROM alpine:3.20
+FROM ubuntu:25.04
 WORKDIR /usr/src/app
 COPY --from=compiler /usr/src/app/target/release/kata-barcode .
 EXPOSE 8080
 ENV TZ=Europe/Madrid
-RUN apk update & apk upgrade -y
-RUN apk add --no-cache tzdata  # Instala tzdata en Alpine
+RUN apt update & apt upgrade -y
+RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime 
 CMD ["./kata-barcode",  "serve"]
+

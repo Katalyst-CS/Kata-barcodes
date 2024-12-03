@@ -3,25 +3,34 @@ APP_NAME=kata-barcode
 DOCKER_IMAGE=kcramsolutions/$(APP_NAME)
 
 # Arquitecturas a las que queremos construir la imagen
-ARCHS=amd64,linux/arm64v8,linux/armv7
+ARCHS=amd64,linux/arm64,linux/arm/v7
 
 # Comando de docker buildx
 DOCKER_BUILDX=docker buildx
 
 # Etiquetas (tags) para la imagen
 TAG_LATEST=latest
-TAG_VERSION=1.0.0
+TAG_VERSION=0.1.0
 
 # Archivo de Dockerfile
 DOCKERFILE=Dockerfile
 
 # Construcción multiplataforma
-build:
+build: init
 	@echo "Construyendo la imagen para múltiples arquitecturas..."
-	$(DOCKER_BUILDX) build --platform linux/$(ARCHS) -t $(DOCKER_IMAGE):$(TAG_LATEST) -t $(DOCKER_IMAGE):$(TAG_VERSION) -f $(DOCKERFILE) .
+	$(DOCKER_BUILDX) build --platform linux/$(ARCHS) -t $(DOCKER_IMAGE):$(TAG_LATEST) -t $(DOCKER_IMAGE):$(TAG_VERSION) -f $(DOCKERFILE) . --load
 	@echo "Construcción completada."
 
-# Para mostrar los entornos de arquitectura disponibles
+build-push: init
+	@echo "Construyendo la imagen para múltiples arquitecturas..."
+	$(DOCKER_BUILDX) build --platform linux/$(ARCHS) -t $(DOCKER_IMAGE):$(TAG_LATEST) -t $(DOCKER_IMAGE):$(TAG_VERSION) -f $(DOCKERFILE) . --push
+	@echo "Construcción completada."
+
+build-local: init
+	@echo "Iniciando construcción local"
+	$(DOCKER_BUILDX) build -t $(DOCKER_IMAGE):$(TAG_VERSION) --load -f $(DOCKERFILE) .
+	@echo "Construcción completada."
+
 platforms:
 	@echo "Arquitecturas disponibles: $(ARCHS)"
 
