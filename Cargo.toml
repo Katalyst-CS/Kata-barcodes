@@ -1,7 +1,11 @@
 [package]
-name = "kata-brcode"
+name = "kata-barcode"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 barcoders = {version = "2.0.0", features = ["image", "svg"]}
+
+[[bin]]
+name = "kata-barcode"
+path = "src/main.rs"
