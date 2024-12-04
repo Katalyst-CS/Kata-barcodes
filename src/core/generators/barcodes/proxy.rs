@@ -51,7 +51,6 @@ impl BarcodeGeneratorProxy {
       BarcodeGeneratorProxy::Code11(gen) => gen.generate(data, height, image_type),
       BarcodeGeneratorProxy::JAN(gen) => gen.generate(data, height, image_type),
       BarcodeGeneratorProxy::UPCA(gen) => gen.generate(data, height, image_type),
-        _ => Err("No se encontrado el generaor")
     }
   }
 }

@@ -1,6 +1,4 @@
 
-use crate::core::generators::images::proxy::ImageGeneratorProxy;
-
 use super::base::BarcodeGenerator;
 use super::base::generate;
 
