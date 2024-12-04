@@ -1,1 +1,1 @@
-pub mod generation_request;
+pub mod generation;

@@ -1,2 +1,2 @@
-pub mod generation_response;
+pub mod generation;
 pub mod error;
