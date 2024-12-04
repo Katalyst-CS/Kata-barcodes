@@ -1,12 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-use crate::shared::commons::create_str;
+use crate::shared::commons::{create_str, ResponseStatus};
 
-#[derive(Deserialize, Serialize, Debug)]
-pub enum ResponseStatus {
-  OK,
-  KO,
-}
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ErrorResponseDto {
