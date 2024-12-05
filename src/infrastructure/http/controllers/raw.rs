@@ -18,6 +18,9 @@ pub async fn index(req: &mut Request, res: &mut Response) {
     let barcodes_type = BarcodeGeneratorProxy::list();
     let content = req.query::<String>("data");
     let height: u32 = req.query::<u32>("height").unwrap_or_else(|| default_height);
+    println!("Barcode type: {}", barcode.clone().unwrap());
+    println!("Image type: {}", img_type.clone().unwrap());
+    println!("Data: {}", content.clone().unwrap());
     let data: Option<String> = match content {
         None => {
             res.status_code(StatusCode::BAD_REQUEST)
@@ -29,13 +32,22 @@ pub async fn index(req: &mut Request, res: &mut Response) {
         }
         Some(d) => Some(d),
     };
+    if !barcodes_type.contains(&barcode.clone().unwrap().as_str()) {
+        let response = ErrorResponseDto::new(
+            format!("Unknow barcode type {}", barcode.unwrap()).as_str(),
+            0x1001,
+        );
+        res.status_code(StatusCode::NOT_IMPLEMENTED)
+            .render(Json(response));
+        return;
+    }
 
     let generator = match barcode.clone() {
         None => {
             res.status_code(StatusCode::BAD_REQUEST)
                 .render(Json(ErrorResponseDto::new(
                     "Not found barcode type",
-                    0x1002,
+                    0x1003,
                 )));
             return;
         }
@@ -53,21 +65,13 @@ pub async fn index(req: &mut Request, res: &mut Response) {
     if !itypes.contains(&img_type.clone().unwrap().as_str()) {
         let response: ErrorResponseDto = ErrorResponseDto::new(
             format!("Unknow image type {}", img_type.clone().unwrap()).as_str(),
-            0x1001,
+            0x1004,
         );
         res.status_code(StatusCode::NOT_IMPLEMENTED)
             .render(Json(response));
         return;
     }
-    if !barcodes_type.contains(&barcode.clone().unwrap().as_str()) {
-        let response = ErrorResponseDto::new(
-            format!("Unknow barcode type {}", barcode.unwrap()).as_str(),
-            0x1001,
-        );
-        res.status_code(StatusCode::NOT_IMPLEMENTED)
-            .render(Json(response));
-        return;
-    }
+    
     let out_img = generator.generate(
         data.unwrap().as_str(),
         height,
@@ -76,7 +80,7 @@ pub async fn index(req: &mut Request, res: &mut Response) {
     let out: Vec<u8> = match out_img {
         Err(e) => {
             res.status_code(StatusCode::BAD_REQUEST)
-                .render(Json(ErrorResponseDto::new(&e, 0x1004)));
+                .render(Json(ErrorResponseDto::new(&e, 0x1005)));
             return;
         }
         Ok(bytes) => bytes,
@@ -85,7 +89,6 @@ pub async fn index(req: &mut Request, res: &mut Response) {
         .insert(
             "Content-Type",
             format!("image/{}", img_type.unwrap()).parse().unwrap(),
-        )
-        .unwrap();
+        );
     res.body(out);
 }
