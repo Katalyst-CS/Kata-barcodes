@@ -1,6 +1,7 @@
 use salvo::{Request, Response};
+use crate::domain::inbound::generation::GenerationRequestDto;
 
-pub fn json_handler(req: &mut Request, res: &mut Response)
+pub async fn json_handler(req: &mut Request, res: &mut Response)
 {
-  let body = req.body();
+  let body = req.parse_json::<GenerationRequestDto>().await;
 }

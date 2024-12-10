@@ -11,9 +11,9 @@ pub struct ListResponseDto {
 
 
 impl ListResponseDto {
-    pub fn new(status: ResponseStatus, list: &[&str]) -> Self
+    pub fn new(status: ResponseStatus, list: Vec<&str>) -> Self
     {
-        let vector: Vec<String> = ListResponseDto::map_arr(list);
+        let vector: Vec<String> = ListResponseDto::map_vector(list);
         ListResponseDto {
             status: Some(status),
             list: vector
@@ -22,16 +22,28 @@ impl ListResponseDto {
 
     fn map_arr(list: &[&str]) -> Vec<String> 
     {
-        let mut vector: Vec<String> = vec![];
+        let mut vector: Vec<String> = Vec::new();
         for element in list {
             vector.push( create_str(&element) );
         };
         vector
     }
 
+    fn map_vector(list: Vec<&str>) -> Vec<String>
+    {
+        let mut vector: Vec<String> = Vec::new();
+        list.iter().map(|el| {vector.push(el.to_string()); el});
+        vector
+    }
+
     pub fn add_element(&mut self, element: &str) 
     {
         self.list.push(create_str(&element));
+    }
+
+    pub fn add_vect(&mut self, vector: Vec<&str>)
+    {
+        self.list = ListResponseDto::map_vector(vector);
     }
 
     pub fn add_list(&mut self, list: &[&str]) {
