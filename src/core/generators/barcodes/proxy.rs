@@ -1,4 +1,5 @@
 use super::{base::BarcodeGenerator, generators::*};
+
 pub enum BarcodeGeneratorProxy {
     Code128(Code128Generator),
     Code93(Code93Generator),
@@ -11,6 +12,18 @@ pub enum BarcodeGeneratorProxy {
     Code11(Code11Generator),
     JAN(JanGenerator),
     UPCA(UPCAGenerator),
+}
+
+pub fn barcode_list() -> Vec<String> {
+  vec![
+      "code128".to_string(),
+      "code93".to_string(),
+      "code39".to_string(),
+      "code11".to_string(),
+      "codabar".to_string(),
+      "ean13".to_string(),
+      "ean8".to_string(),
+  ]
 }
 
 impl BarcodeGeneratorProxy {
@@ -30,11 +43,6 @@ impl BarcodeGeneratorProxy {
       "upca" => BarcodeGeneratorProxy::UPCA(UPCAGenerator),
       _ => panic!("No se reconoce {}", type_gen)
     }
-  }
-
-  pub fn list() -> Vec<&'static str>
-  {
-    vec!["code128", "code93", "code39", "code11", "codabar", "ean13", "ean8"]
   }
 
   pub fn generate(&self, data: &str, height: u32, image_type: &str) -> Result<Vec<u8>, &'static str>

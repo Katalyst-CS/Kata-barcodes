@@ -1,7 +1,7 @@
 extern crate base64;
 use crate::{
     core::generators::{
-        barcodes::proxy::BarcodeGeneratorProxy, images::proxy::ImageGeneratorProxy,
+        barcodes::proxy::{BarcodeGeneratorProxy, barcode_list}, images::proxy::ImageGeneratorProxy,
     },
     domain::outbound::error::ErrorResponseDto
 };
@@ -15,7 +15,7 @@ pub async fn index(req: &mut Request, res: &mut Response) {
     };
     let barcode: Option<String> = req.param::<String>("code");
     let img_type: Option<String> = req.param::<String>("ext");
-    let barcodes_type = BarcodeGeneratorProxy::list();
+    let barcodes_type = barcode_list();
     let content = req.query::<String>("data");
     let height: u32 = req.query::<u32>("height").unwrap_or_else(|| default_height);
     println!("Barcode type: {}", barcode.clone().unwrap());
@@ -32,7 +32,7 @@ pub async fn index(req: &mut Request, res: &mut Response) {
         }
         Some(d) => Some(d),
     };
-    if !barcodes_type.contains(&barcode.clone().unwrap().as_str()) {
+    if !barcodes_type.contains(&barcode.clone().unwrap()) {
         let response = ErrorResponseDto::new(
             format!("Unknow barcode type {}", barcode.unwrap()).as_str(),
             0x1001,

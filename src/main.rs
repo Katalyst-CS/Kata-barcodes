@@ -28,6 +28,7 @@ async fn main() {
     let port: String = env::var("APP_PORT").unwrap_or_else(|_| "3000".to_string());
     let service:  Service = Service::new(router).hoop(generate_cors());
     let acceptor: TcpAcceptor = TcpListener::new(format!("{}:{}", address, port)).bind().await;
+    println!("Server started in http://{}:{}", address, port);
     Server::new(acceptor).serve(service).await
 }
 
