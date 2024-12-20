@@ -1,18 +1,17 @@
-use serde::{Deserialize, Serialize};
 use crate::shared::commons::{create_str, ResponseStatus};
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ListResponseDto {
     pub status: Option<ResponseStatus>,
-    pub list: Vec<String>,  // Cambié a Vec<String> en lugar de &'static mut Vec<String>
+    pub list: Vec<String>, // Cambié a Vec<String> en lugar de &'static mut Vec<String>
 }
 
 impl ListResponseDto {
-    pub fn new(status: ResponseStatus, list: &[&str]) -> Self {
-        let vector: Vec<String> = ListResponseDto::map_vector(list);
+    pub fn new(status: ResponseStatus, list: Vec<String>) -> Self {
         ListResponseDto {
             status: Some(status),
-            list: vector,
+            list: list,
         }
     }
 
