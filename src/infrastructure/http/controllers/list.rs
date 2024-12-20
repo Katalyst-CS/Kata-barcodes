@@ -7,7 +7,7 @@ use salvo::prelude::Json;
 use salvo::{handler, Request, Response};
 
 #[handler]
-pub async fn list_code_tipes(_req: &mut Request, res: &mut Response) {
+pub async fn list_code_types(_req: &mut Request, res: &mut Response) {
     let bartypes: Vec<String> = barcode_list();
     let response = ListResponseDto::new(ResponseStatus::OK, bartypes);
     println!("Response: {:?}", response);
