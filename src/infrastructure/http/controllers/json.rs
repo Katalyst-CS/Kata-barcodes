@@ -1,11 +1,14 @@
 use crate::domain::inbound::generation::GenerationRequestDto;
 use crate::domain::outbound::error::ErrorResponseDto;
+use crate::shared::crypto::check_sign;
+use log::info;
 use salvo::prelude::Json;
 use salvo::{handler, http::StatusCode, Request, Response};
 
 #[handler]
 pub async fn json_handler(req: &mut Request, res: &mut Response) {
-    let body_result: Result<GenerationRequestDto, salvo::http::ParseError> = req.parse_json::<GenerationRequestDto>().await;
+    let body_result: Result<GenerationRequestDto, salvo::http::ParseError> =
+        req.parse_json::<GenerationRequestDto>().await;
     let barcode_option: Option<String> = req.param::<String>("code");
     let body: GenerationRequestDto = match body_result {
         Err(_) => {
@@ -16,7 +19,6 @@ pub async fn json_handler(req: &mut Request, res: &mut Response) {
         }
         Ok(b) => b,
     };
-    println!("{:?}", body);
     // fields check
     let data = match body.data {
         Some(d) => d,
@@ -42,7 +44,11 @@ pub async fn json_handler(req: &mut Request, res: &mut Response) {
             return;
         }
     };
-    
+    let sign_str = format!("{}.{}", data, image);
+    info!("String chain created {}", sign_str);
+    let check = check_sign(sign, sign_str);
+    info!("Signature: {}", check.unwrap());
+
     res.render(Json(vec!["hola", "world"]));
 }
 
