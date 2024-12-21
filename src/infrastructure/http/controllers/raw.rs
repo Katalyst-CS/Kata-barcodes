@@ -1,9 +1,10 @@
 extern crate base64;
 use crate::{
     core::generators::{
-        barcodes::proxy::{BarcodeGeneratorProxy, barcode_list}, images::proxy::ImageGeneratorProxy,
+        barcodes::proxy::{barcode_list, BarcodeGeneratorProxy},
+        images::proxy::ImageGeneratorProxy,
     },
-    domain::outbound::error::ErrorResponseDto
+    domain::outbound::error::ErrorResponseDto,
 };
 use salvo::{handler, http::StatusCode, writing::Json, Request, Response};
 
@@ -71,7 +72,7 @@ pub async fn index(req: &mut Request, res: &mut Response) {
             .render(Json(response));
         return;
     }
-    
+
     let out_img = generator.generate(
         data.unwrap().as_str(),
         height,
@@ -85,10 +86,9 @@ pub async fn index(req: &mut Request, res: &mut Response) {
         }
         Ok(bytes) => bytes,
     };
-    res.headers_mut()
-        .insert(
-            "Content-Type",
-            format!("image/{}", img_type.unwrap()).parse().unwrap(),
-        );
+    res.headers_mut().insert(
+        "Content-Type",
+        format!("image/{}", img_type.unwrap()).parse().unwrap(),
+    );
     res.body(out);
 }
