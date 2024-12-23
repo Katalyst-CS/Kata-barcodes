@@ -1,7 +1,7 @@
 use crate::domain::inbound::generation::GenerationRequestDto;
 use crate::domain::outbound::error::ErrorResponseDto;
 use crate::shared::crypto::check_sign;
-use log::info;
+use log::{info, warn};
 use salvo::prelude::Json;
 use salvo::{handler, http::StatusCode, Request, Response};
 
@@ -20,25 +20,38 @@ pub async fn json_handler(req: &mut Request, res: &mut Response) {
         Ok(b) => b,
     };
     // fields check
+    info!("Checking the body data");
     let data = match body.data {
-        Some(d) => d,
+        Some(d) => {
+            info!("Body.data: OK");
+            d
+        }
         None => {
+            warn!("No data in body");
             let response = raise_error_valid("data".to_string());
             res.render(Json(response));
             return;
         }
     };
     let sign = match body.sign {
-        Some(s) => s,
+        Some(s) => {
+            info!("Body.sign: OK");
+            s
+        }
         None => {
+            warn!("No sign in body");
             let response = raise_error_valid("sign".to_string());
             res.render(Json(response));
             return;
         }
     };
     let image: String = match body.image {
-        Some(i) => i,
+        Some(i) => {
+            info!("Body.image: OK");
+            i
+        }
         None => {
+            warn!("No image in body");
             let response = raise_error_valid("image".to_string());
             res.render(Json(response));
             return;
