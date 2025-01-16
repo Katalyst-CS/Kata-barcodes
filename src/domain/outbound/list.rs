@@ -1,4 +1,4 @@
-use crate::shared::commons::{create_str, ResponseStatus};
+use crate::shared::commons::ResponseStatus;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
