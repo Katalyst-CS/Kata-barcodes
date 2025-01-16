@@ -5,4 +5,5 @@ pub struct GenerationRequestDto {
     pub data: Option<String>,
     pub sign: Option<String>,
     pub image: Option<String>, // type of image
+    pub height: Option<u32>,
 }
