@@ -15,19 +15,19 @@ impl ListResponseDto {
         }
     }
 
-    fn map_vector(list: &[&str]) -> Vec<String> {
-        list.iter().map(|&el| el.to_string()).collect()
-    }
+    // fn map_vector(list: &[&str]) -> Vec<String> {
+    //     list.iter().map(|&el| el.to_string()).collect()
+    // }
 
-    pub fn add_element(&mut self, element: &str) {
-        self.list.push(element.to_string());
-    }
+    // pub fn add_element(&mut self, element: &str) {
+    //     self.list.push(element.to_string());
+    // }
 
-    pub fn add_vect(&mut self, vector: &Vec<&str>) {
-        self.list = ListResponseDto::map_vector(vector);
-    }
+    // pub fn add_vect(&mut self, vector: &Vec<&str>) {
+    //     self.list = ListResponseDto::map_vector(vector);
+    // }
 
-    pub fn add_list(&mut self, list: &[&str]) {
-        self.list = ListResponseDto::map_vector(list);
-    }
+    // pub fn add_list(&mut self, list: &[&str]) {
+    //     self.list = ListResponseDto::map_vector(list);
+    // }
 }
