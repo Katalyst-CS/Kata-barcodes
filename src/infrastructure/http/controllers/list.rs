@@ -1,5 +1,5 @@
 use crate::{
-    core::generators::barcodes::proxy::{barcode_list, BarcodeGeneratorProxy},
+    core::generators::barcodes::proxy::barcode_list,
     domain::outbound::list::ListResponseDto,
     shared::commons::ResponseStatus,
 };
