@@ -2,7 +2,6 @@ use crate::infrastructure::http::controllers::json::json_handler;
 
 use super::super::controllers::{img, list, raw};
 use salvo::Router;
-use salvo::{handler, Response};
 
 pub fn main_router() -> Router {
     Router::new()

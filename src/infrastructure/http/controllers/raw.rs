@@ -42,7 +42,6 @@ pub async fn index(req: &mut Request, res: &mut Response) {
             .render(Json(response));
         return;
     }
-
     let generator = match barcode.clone() {
         None => {
             res.status_code(StatusCode::BAD_REQUEST)
@@ -72,7 +71,6 @@ pub async fn index(req: &mut Request, res: &mut Response) {
             .render(Json(response));
         return;
     }
-
     let out_img = generator.generate(
         data.unwrap().as_str(),
         height,
